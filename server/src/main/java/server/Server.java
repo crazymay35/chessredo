@@ -10,6 +10,13 @@ public class Server {
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
         // Register your endpoints and exception handlers here.
+        //clear application
+        //register
+        //login
+        //logout
+        //list games
+        //create game
+        //join game
 
     }
 
