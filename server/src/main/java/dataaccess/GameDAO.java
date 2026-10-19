@@ -8,6 +8,7 @@ import java.util.HashMap;
 public class GameDAO implements InterfaceGameDAO{
     private HashMap<Integer, GameData> games = new HashMap<>();
     int nextGameID = 0;
+
     @Override
     public GameData getGame(int gameID) {
         return games.get(gameID);
