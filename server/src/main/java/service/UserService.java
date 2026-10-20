@@ -21,6 +21,7 @@ public class UserService {
         //checks if missing fields
         //checks if user already exists
         //registers user
+        //returns AuthData
     //UserData is json{username:"name",password:"pass",email:"e@mail.com"}
     public AuthData register(UserData user) throws Exception {
         if (user.username() == null || user.password() == null || user.email() == null) {
@@ -40,6 +41,7 @@ public class UserService {
         //check if missing fields
         //check if user exists
         //check if passwords match
+        //return AuthData
     //LoginRequest is json{username:"name",password:"pass"}
     public AuthData login(UserLoginData user) throws Exception {
         if (user.username() == null || user.password() == null) {
@@ -58,5 +60,12 @@ public class UserService {
         return authData;
     }
     //logout
-
+        //checks if authToken exists
+        //returns nothing
+    public void logout(AuthData user) throws Exception {
+        if (authDAO.getAuthToken(user.authToken()) == null) {
+            throw new UnauthorizedException("Error: unauthorized");
+        }
+        authDAO.deleteAuth(user.authToken());
+    }
 }
