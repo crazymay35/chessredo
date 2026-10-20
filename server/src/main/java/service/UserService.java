@@ -1,10 +1,7 @@
 package service;
-import dataaccess.AuthDAO;
-import dataaccess.UserDAO;
-import model.UserLoginData;
-import model.AuthData;
-import model.UserData;
-import service.exceptions.*;
+
+import dataaccess.*;
+import model.*;
 
 import java.util.UUID;
 
