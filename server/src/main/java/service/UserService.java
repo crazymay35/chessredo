@@ -14,12 +14,6 @@ public class UserService {
         this.authDAO = authDAO;
     }
 
-    //register
-        //checks if missing fields
-        //checks if user already exists
-        //registers user
-        //returns AuthData
-    //UserData is json{username:"name",password:"pass",email:"e@mail.com"}
     public AuthData register(UserData user) throws Exception {
         if (user.username() == null || user.password() == null || user.email() == null) {
             throw new BadRequestException("Error: bad request");
@@ -34,12 +28,6 @@ public class UserService {
         return authData;
     }
 
-    //login
-        //check if missing fields
-        //check if user exists
-        //check if passwords match
-        //return AuthData
-    //LoginRequest is json{username:"name",password:"pass"}
     public AuthData login(UserLoginRequest user) throws Exception {
         if (user.username() == null || user.password() == null) {
             throw new BadRequestException("Error: bad request");
@@ -57,9 +45,6 @@ public class UserService {
         return authData;
     }
 
-    //logout
-        //checks if authToken exists
-        //returns nothing
     public void logout(String authToken) throws Exception {
         if (authDAO.getAuthToken(authToken) == null) {
             throw new UnauthorizedException("Error: unauthorized");
