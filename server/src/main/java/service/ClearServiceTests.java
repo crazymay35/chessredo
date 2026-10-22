@@ -5,38 +5,41 @@ import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ClearServiceTests {
-    private UserService userService;
-    private GameService gameService;
-    private InterfaceUserDAO userDAO;
-    private InterfaceAuthDAO authDAO;
-    private InterfaceGameDAO gameDAO;
-
-    @BeforeEach
-    public void setup() {
-        authDAO = new AuthDAO();
-        userDAO = new UserDAO();
-        gameDAO = new GameDAO();
-        userService = new UserService((UserDAO) userDAO, (AuthDAO) authDAO);
-        gameService = new GameService((AuthDAO) authDAO, (GameDAO) gameDAO);
-    }
-
     @Test
     public void clearSuccess() throws Exception {
+        AuthDAO authDAO = new AuthDAO();
+        UserDAO userDAO = new UserDAO();
+        GameDAO gameDAO = new GameDAO();
+
+        Collection<Object> mixed = new ArrayList<>();
+
+        UserService userService = new UserService((UserDAO) userDAO, (AuthDAO) authDAO);
+        GameService gameService = new GameService((AuthDAO) authDAO, (GameDAO) gameDAO);
+
         AuthData authData = userService.register(new UserData("username","password","user@gmail.com"));
         GameCreateRequest gameReq = new GameCreateRequest("game");
         int gameID = gameService.createGame(authData.authToken(),gameReq);
-        assertNotNull(userDAO.getUser("username"));
-        assertNotNull(authDAO.getAuthToken(authData.authToken()));
-        assertNotNull(gameDAO.getGame(gameID));
+
+        mixed.add(userDAO.getUser("username"));
+        mixed.add(authDAO.getAuthToken(authData.authToken()));
+        mixed.add(gameDAO.getGame(gameID));
+
+        for (Object item : mixed) {
+            assertNotNull(item);
+        }
 
         ClearService clearService = new ClearService(userDAO, authDAO, gameDAO);
         clearService.clear();
 
-        assertNull(userDAO.getUser("username"));
-        assertNull(authDAO.getAuthToken(authData.authToken()));
-        assertNull(gameDAO.getGame(gameID));
+        for (Object item : mixed) {
+            assertNull(item);
+        }
     }
 }

@@ -72,7 +72,7 @@ public class GameServiceTests {
         });
     }
     @Test
-    public void CreateGameFailureMissingFields() throws Exception {
+    public void createGameFailureMissingFields() throws Exception {
         AuthData authData = userService.register(new UserData("username","password","user@gmail.com"));
         GameCreateRequest gameRequest = new GameCreateRequest(null);
         assertThrows(BadRequestException.class, ()-> {
@@ -81,7 +81,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void JoinGameSuccessWhite() throws Exception {
+    public void joinGameSuccessWhite() throws Exception {
         AuthData authData = userService.register(new UserData("username","password","user@gmail.com"));
         GameCreateRequest gameCreate = new GameCreateRequest("game");
         int gameID = gameService.createGame(authData.authToken(),gameCreate);
@@ -91,7 +91,7 @@ public class GameServiceTests {
         assertEquals("username",updated.whiteUsername());
     }
     @Test
-    public void JoinGameSuccessBlack() throws Exception {
+    public void joinGameSuccessBlack() throws Exception {
         AuthData authData = userService.register(new UserData("username","password","user@gmail.com"));
         GameCreateRequest gameCreate = new GameCreateRequest("game");
         int gameID = gameService.createGame(authData.authToken(),gameCreate);
@@ -101,7 +101,7 @@ public class GameServiceTests {
         assertEquals("username",updated.blackUsername());
     }
     @Test
-    void JoinGameFailureInvalidAuthToken() throws Exception {
+    void joinGameFailureInvalidAuthToken() throws Exception {
         AuthData authData = userService.register(new UserData("username","password","user@gmail.com"));
         AuthData fakeAuth = new AuthData("authToken","username");
         GameCreateRequest gameCreate = new GameCreateRequest("game");

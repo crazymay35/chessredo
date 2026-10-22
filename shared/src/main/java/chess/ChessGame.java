@@ -98,7 +98,8 @@ public class ChessGame {
             throw new InvalidMoveException("it is not " + piece.getTeamColor().toString() + " turn it is " + teamTurn);
         }
         if (validMoves == null || !validMoves.contains(move)) {
-            throw new InvalidMoveException("move" + move.getStartPosition().toString() + "to" + move.getEndPosition().toString() + " is not a valid move");
+            throw new InvalidMoveException("move" + move.getStartPosition().toString() +
+                    "to" + move.getEndPosition().toString() + " is not a valid move");
         }
         boardChange(chessBoard,move);
         teamTurn = (teamTurn == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;

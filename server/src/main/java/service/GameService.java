@@ -19,7 +19,7 @@ public class GameService {
     //list games
         //check if authToken valid
         //returns list of games
-    public Collection<GameData> listGames(String authToken) throws Exception{
+    public Collection<GameData> listGames(String authToken) throws Exception {
         if (authDAO.getAuthToken(authToken) == null) {
             throw new UnauthorizedException("Error: unauthorized");
         }
@@ -68,14 +68,14 @@ public class GameService {
             if (gameData.blackUsername() != null) {
                 throw new AlreadyTakenException("Error: already taken");
             }
-            GameData newGameData = new GameData(gameData.gameID(), gameData.whiteUsername(), authData.username(), gameData.gameName(), gameData.game());
+            GameData newGameData = gameData.setBlackUsername(authData.username());
             gameDAO.updateGame(newGameData);
         }
         else if (game.playerColor().equals("WHITE")) {
             if (gameData.whiteUsername() != null) {
                 throw new AlreadyTakenException("Error: already taken");
             }
-            GameData newGameData = new GameData(gameData.gameID(), authData.username(), gameData.blackUsername(), gameData.gameName(), gameData.game());
+            GameData newGameData = gameData.setWhiteUsername(authData.username());
             gameDAO.updateGame(newGameData);
         }
         else {
