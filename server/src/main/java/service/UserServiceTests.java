@@ -25,7 +25,7 @@ public class UserServiceTests {
         UserData sendUser = new UserData("username","password","user@gmail.com");
         AuthData returnUser = userService.register(sendUser);
         assertNotNull(returnUser.authToken());
-        assertEquals("username",returnUser.username());
+        assertEquals(sendUser.username(),returnUser.username());
     }
     @Test
     public void registerFailureMissingFields() {
