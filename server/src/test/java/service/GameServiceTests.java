@@ -12,17 +12,15 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GameServiceTests {
     private UserService userService;
     private GameService gameService;
-    private InterfaceAuthDAO authDAO;
-    private InterfaceUserDAO userDAO;
     private InterfaceGameDAO gameDAO;
 
     @BeforeEach
     public void setup() {
-        authDAO = new AuthDAO();
-        userDAO = new UserDAO();
+        AuthDAO authDAO = new AuthDAO();
+        UserDAO userDAO = new UserDAO();
         gameDAO = new GameDAO();
-        userService = new UserService((UserDAO) userDAO, (AuthDAO) authDAO);
-        gameService = new GameService((AuthDAO) authDAO, (GameDAO) gameDAO);
+        userService = new UserService(userDAO, authDAO);
+        gameService = new GameService(authDAO, (GameDAO) gameDAO);
     }
 
     //list games
@@ -48,9 +46,7 @@ public class GameServiceTests {
     @Test
     public void listGameFailureInvalidAuthToken() {
         AuthData fakeAuth = new AuthData("authToken","username");
-        assertThrows(UnauthorizedException.class, () ->  {
-            gameService.listGames(fakeAuth.authToken());
-        });
+        assertThrows(UnauthorizedException.class, () -> gameService.listGames(fakeAuth.authToken()));
     }
 
     //create game
@@ -67,17 +63,13 @@ public class GameServiceTests {
     public void createGameFailureInvalidAuthToken() {
         AuthData fakeAuth = new AuthData("authToken","username");
         GameCreateRequest gameRequest = new GameCreateRequest("game");
-        assertThrows(UnauthorizedException.class, () ->  {
-            gameService.createGame(fakeAuth.authToken(),gameRequest);
-        });
+        assertThrows(UnauthorizedException.class, () -> gameService.createGame(fakeAuth.authToken(),gameRequest));
     }
     @Test
     public void createGameFailureMissingFields() throws Exception {
         AuthData authData = userService.register(new UserData("username","password","user@gmail.com"));
         GameCreateRequest gameRequest = new GameCreateRequest(null);
-        assertThrows(BadRequestException.class, ()-> {
-            gameService.createGame(authData.authToken(),gameRequest);
-        });
+        assertThrows(BadRequestException.class, ()-> gameService.createGame(authData.authToken(),gameRequest));
     }
 
     @Test
@@ -107,9 +99,7 @@ public class GameServiceTests {
         GameCreateRequest gameCreate = new GameCreateRequest("game");
         int gameID = gameService.createGame(authData.authToken(),gameCreate);
         GameJoinRequest gameRequest = new GameJoinRequest("WHITE",gameID);
-        assertThrows(UnauthorizedException.class, () ->  {
-            gameService.joinGame(fakeAuth.authToken(),gameRequest);
-        });
+        assertThrows(UnauthorizedException.class, () -> gameService.joinGame(fakeAuth.authToken(),gameRequest));
     }
     @Test
     void joinGameFailureMissingFields() throws Exception {
@@ -117,9 +107,7 @@ public class GameServiceTests {
         GameCreateRequest gameCreate = new GameCreateRequest("game");
         gameService.createGame(authData.authToken(),gameCreate);
         GameJoinRequest gameRequest = new GameJoinRequest(null,0);
-        assertThrows(BadRequestException.class, () ->  {
-            gameService.joinGame(authData.authToken(),gameRequest);
-        });
+        assertThrows(BadRequestException.class, () -> gameService.joinGame(authData.authToken(),gameRequest));
     }
     @Test
     public void joinGameFailureGameDNE() throws Exception {
@@ -127,9 +115,7 @@ public class GameServiceTests {
         GameCreateRequest gameCreate = new GameCreateRequest("game");
         gameService.createGame(authData.authToken(),gameCreate);
         GameJoinRequest gameRequest = new GameJoinRequest("BLACK",0);
-        assertThrows(BadRequestException.class, () ->  {
-            gameService.joinGame(authData.authToken(),gameRequest);
-        });
+        assertThrows(BadRequestException.class, () -> gameService.joinGame(authData.authToken(),gameRequest));
     }
     @Test
     public void joinGameFailureGameWhiteTaken() throws Exception {
@@ -138,9 +124,7 @@ public class GameServiceTests {
         int gameID = gameService.createGame(authData.authToken(),gameCreate);
         GameJoinRequest gameJoin = new GameJoinRequest("WHITE",gameID);
         gameService.joinGame(authData.authToken(), gameJoin);
-        assertThrows(AlreadyTakenException.class, ()-> {
-            gameService.joinGame(authData.authToken(), gameJoin);
-        });
+        assertThrows(AlreadyTakenException.class, ()-> gameService.joinGame(authData.authToken(), gameJoin));
     }
     @Test
     public void joinGameFailureGameBlackTaken() throws Exception {
@@ -149,9 +133,7 @@ public class GameServiceTests {
         int gameID = gameService.createGame(authData.authToken(),gameCreate);
         GameJoinRequest gameJoin = new GameJoinRequest("BLACK",gameID);
         gameService.joinGame(authData.authToken(), gameJoin);
-        assertThrows(AlreadyTakenException.class, ()-> {
-            gameService.joinGame(authData.authToken(), gameJoin);
-        });
+        assertThrows(AlreadyTakenException.class, ()-> gameService.joinGame(authData.authToken(), gameJoin));
     }
     @Test
     public void joinGameFailureGameFieldWrong() throws Exception {
@@ -159,8 +141,6 @@ public class GameServiceTests {
         GameCreateRequest gameCreate = new GameCreateRequest("game");
         int gameID = gameService.createGame(authData.authToken(),gameCreate);
         GameJoinRequest gameJoin = new GameJoinRequest("color",gameID);
-        assertThrows(BadRequestException.class, ()-> {
-            gameService.joinGame(authData.authToken(), gameJoin);
-        });
+        assertThrows(BadRequestException.class, ()-> gameService.joinGame(authData.authToken(), gameJoin));
     }
 }

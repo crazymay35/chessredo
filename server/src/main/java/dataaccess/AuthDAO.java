@@ -5,7 +5,7 @@ import model.AuthData;
 import java.util.HashMap;
 
 public class AuthDAO implements InterfaceAuthDAO {
-    private HashMap<String, AuthData> auths = new HashMap<>();
+    private final HashMap<String, AuthData> auths = new HashMap<>();
 
     @Override
     public AuthData getAuthToken(String authToken) {

@@ -4,7 +4,7 @@ import model.UserData;
 import java.util.HashMap;
 
 public class UserDAO implements InterfaceUserDAO {
-    private HashMap<String, UserData> users = new HashMap<>();
+    private final HashMap<String, UserData> users = new HashMap<>();
 
     @Override
     public UserData getUser(String username) {

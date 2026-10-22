@@ -18,8 +18,8 @@ public class ClearServiceTests {
 
         Collection<Object> mixed = new ArrayList<>();
 
-        UserService userService = new UserService((UserDAO) userDAO, (AuthDAO) authDAO);
-        GameService gameService = new GameService((AuthDAO) authDAO, (GameDAO) gameDAO);
+        UserService userService = new UserService(userDAO, authDAO);
+        GameService gameService = new GameService(authDAO, gameDAO);
 
         AuthData authData = userService.register(new UserData("username","password","user@gmail.com"));
         GameCreateRequest gameReq = new GameCreateRequest("game");
