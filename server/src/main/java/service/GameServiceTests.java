@@ -5,6 +5,8 @@ import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameServiceTests {
@@ -31,16 +33,17 @@ public class GameServiceTests {
         gameService.listGames(authData.authToken());
     }
     @Test
-    public void listGameSuccss() throws Exception {
+    public void listGameSuccess() throws Exception {
         AuthData authData = userService.register(new UserData("username","password","user@gmail.com"));
-        assertNotNull(authData.authToken());
         GameCreateRequest gameReq1 = new GameCreateRequest("game1");
         GameCreateRequest gameReq2 = new GameCreateRequest("game2");
         GameCreateRequest gameReq3 = new GameCreateRequest("game3");
         gameService.createGame(authData.authToken(),gameReq1);
         gameService.createGame(authData.authToken(),gameReq2);
         gameService.createGame(authData.authToken(),gameReq3);
-        gameService.listGames(authData.authToken());
+        Collection<GameData> gamesList = gameService.listGames(authData.authToken());
+        assertNotNull(gamesList);
+        assertEquals(3,gamesList.size());
     }
     @Test
     public void listGameFailureInvalidAuthToken() {
@@ -56,6 +59,9 @@ public class GameServiceTests {
         AuthData authData = userService.register(new UserData("username","password","user@gmail.com"));
         GameCreateRequest gameRequest = new GameCreateRequest("game");
         int gameID = gameService.createGame(authData.authToken(),gameRequest);
+        assertTrue(gameID > 0);
+        assertNotNull(gameDAO.getGame(gameID));
+        assertEquals("game", gameDAO.getGame(gameID).gameName());
     }
     @Test
     public void createGameFailureInvalidAuthToken() {
@@ -81,6 +87,8 @@ public class GameServiceTests {
         int gameID = gameService.createGame(authData.authToken(),gameCreate);
         GameJoinRequest gameJoin = new GameJoinRequest("WHITE",gameID);
         gameService.joinGame(authData.authToken(), gameJoin);
+        GameData updated = gameDAO.getGame(gameID);
+        assertEquals("username",updated.whiteUsername());
     }
     @Test
     public void JoinGameSuccessBlack() throws Exception {
@@ -89,6 +97,8 @@ public class GameServiceTests {
         int gameID = gameService.createGame(authData.authToken(),gameCreate);
         GameJoinRequest gameJoin = new GameJoinRequest("BLACK",gameID);
         gameService.joinGame(authData.authToken(), gameJoin);
+        GameData updated = gameDAO.getGame(gameID);
+        assertEquals("username",updated.blackUsername());
     }
     @Test
     void JoinGameFailureInvalidAuthToken() throws Exception {
