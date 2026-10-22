@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 public class GameDAO implements InterfaceGameDAO{
     private HashMap<Integer, GameData> games = new HashMap<>();
-    int nextGameID = 0;
 
     @Override
     public GameData getGame(int gameID) {
@@ -21,10 +20,8 @@ public class GameDAO implements InterfaceGameDAO{
 
     @Override
     public int createGame(GameData game) {
-        int id = nextGameID++;
-        GameData newGame = new GameData(id,game.whiteUsername(),game.blackUsername(),game.gameName(),game.game());
-        games.put(id,newGame);
-        return id;
+        games.put(game.gameID(),game);
+        return game.gameID();
     }
 
     @Override

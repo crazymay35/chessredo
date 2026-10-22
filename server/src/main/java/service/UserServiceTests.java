@@ -48,21 +48,21 @@ public class UserServiceTests {
     public void loginSuccess() throws Exception {
         UserData registerUser = new UserData("username","password","user@gmail.com");
         userService.register(registerUser);
-        UserLoginData sendUser = new UserLoginData("username","password");
+        UserLoginRequest sendUser = new UserLoginRequest("username","password");
         AuthData returnUser = userService.login(sendUser);
         assertNotNull(returnUser.authToken());
         assertEquals("username",returnUser.username());
     }
     @Test
     public void loginFailureMissingFields() {
-        UserLoginData sendUser = new UserLoginData(null,null);
+        UserLoginRequest sendUser = new UserLoginRequest(null,null);
         assertThrows(BadRequestException.class, ()-> {
             userService.login(sendUser);
         });
     }
     @Test
     public void loginFailureUserDNE() {
-        UserLoginData sendUser = new UserLoginData("username","password");
+        UserLoginRequest sendUser = new UserLoginRequest("username","password");
         assertThrows(UnauthorizedException.class, ()-> {
             userService.login(sendUser);
         });
@@ -71,7 +71,7 @@ public class UserServiceTests {
     public void loginFailurePassword() throws Exception {
         UserData validUser = new UserData("username","correctPassword", "user@gmail.com");
         userService.register(validUser);
-        UserLoginData badLoginRequest = new UserLoginData("username","wrongPassword");
+        UserLoginRequest badLoginRequest = new UserLoginRequest("username","wrongPassword");
         assertThrows(UnauthorizedException.class, () -> {
             userService.login(badLoginRequest);
         });
@@ -83,25 +83,25 @@ public class UserServiceTests {
         UserData sendUser = new UserData("username","password","user@gmail.com");
         AuthData returnUser = userService.register(sendUser);
         assertNotNull(returnUser.authToken());
-        userService.logout(returnUser);
+        userService.logout(returnUser.authToken());
         assertThrows(UnauthorizedException.class, () -> {
-            userService.logout(returnUser);
+            userService.logout(returnUser.authToken());
         });
     }
     @Test
     public void logoutFailureInvalidAuthToken() {
         AuthData fakeAuth = new AuthData("authToken","username");
         assertThrows(UnauthorizedException.class, () ->  {
-            userService.logout(fakeAuth);
+            userService.logout(fakeAuth.authToken());
         });
     }
     @Test
     public  void logoutFailureDuplicate() throws Exception {
         UserData sendUser = new UserData("username","password","user@gmail.com");
         AuthData returnUser = userService.register(sendUser);
-        userService.logout(returnUser);
+        userService.logout(returnUser.authToken());
         assertThrows(UnauthorizedException.class, () -> {
-            userService.logout(returnUser);
+            userService.logout(returnUser.authToken());
         });
     }
 }

@@ -40,7 +40,7 @@ public class UserService {
         //check if passwords match
         //return AuthData
     //LoginRequest is json{username:"name",password:"pass"}
-    public AuthData login(UserLoginData user) throws Exception {
+    public AuthData login(UserLoginRequest user) throws Exception {
         if (user.username() == null || user.password() == null) {
             throw new BadRequestException("Error: bad request");
         }
@@ -56,13 +56,14 @@ public class UserService {
         authDAO.createAuth(authData);
         return authData;
     }
+
     //logout
         //checks if authToken exists
         //returns nothing
-    public void logout(AuthData user) throws Exception {
-        if (authDAO.getAuthToken(user.authToken()) == null) {
+    public void logout(String authToken) throws Exception {
+        if (authDAO.getAuthToken(authToken) == null) {
             throw new UnauthorizedException("Error: unauthorized");
         }
-        authDAO.deleteAuth(user.authToken());
+        authDAO.deleteAuth(authToken);
     }
 }
