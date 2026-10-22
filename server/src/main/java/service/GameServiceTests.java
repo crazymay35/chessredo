@@ -112,7 +112,7 @@ public class GameServiceTests {
         });
     }
     @Test
-    void joinGameFailureGameDNE() throws Exception {
+    public void joinGameFailureGameDNE() throws Exception {
         AuthData authData = userService.register(new UserData("username","password","user@gmail.com"));
         GameCreateRequest gameCreate = new GameCreateRequest("game");
         gameService.createGame(authData.authToken(),gameCreate);
@@ -121,5 +121,36 @@ public class GameServiceTests {
             gameService.joinGame(authData.authToken(),gameRequest);
         });
     }
-
+    @Test
+    public void joinGameFailureGameWhiteTaken() throws Exception {
+        AuthData authData = userService.register(new UserData("username","password","user@gmail.com"));
+        GameCreateRequest gameCreate = new GameCreateRequest("game");
+        int gameID = gameService.createGame(authData.authToken(),gameCreate);
+        GameJoinRequest gameJoin = new GameJoinRequest("WHITE",gameID);
+        gameService.joinGame(authData.authToken(), gameJoin);
+        assertThrows(AlreadyTakenException.class, ()-> {
+            gameService.joinGame(authData.authToken(), gameJoin);
+        });
+    }
+    @Test
+    public void joinGameFailureGameBlackTaken() throws Exception {
+        AuthData authData = userService.register(new UserData("username","password","user@gmail.com"));
+        GameCreateRequest gameCreate = new GameCreateRequest("game");
+        int gameID = gameService.createGame(authData.authToken(),gameCreate);
+        GameJoinRequest gameJoin = new GameJoinRequest("BLACK",gameID);
+        gameService.joinGame(authData.authToken(), gameJoin);
+        assertThrows(AlreadyTakenException.class, ()-> {
+            gameService.joinGame(authData.authToken(), gameJoin);
+        });
+    }
+    @Test
+    public void joinGameFailureGameFieldWrong() throws Exception {
+        AuthData authData = userService.register(new UserData("username","password","user@gmail.com"));
+        GameCreateRequest gameCreate = new GameCreateRequest("game");
+        int gameID = gameService.createGame(authData.authToken(),gameCreate);
+        GameJoinRequest gameJoin = new GameJoinRequest("color",gameID);
+        assertThrows(BadRequestException.class, ()-> {
+            gameService.joinGame(authData.authToken(), gameJoin);
+        });
+    }
 }
