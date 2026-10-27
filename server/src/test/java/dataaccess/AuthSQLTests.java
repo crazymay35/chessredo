@@ -1,10 +1,13 @@
 package dataaccess;
 
+import model.AuthData;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.xml.crypto.Data;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class AuthSQLTests {
     private AuthSQL authSQL;
@@ -19,9 +22,14 @@ public class AuthSQLTests {
         //authSQL.clear();
     }
     @Test
-    public void createDatabase() {
-        String authToken = "testAuth";
-        String username = "test";
+    public void setAuthSQLSuccess() {
+        assertNotNull(authSQL);
+    }
+
+    @Test
+    public void createAuthSuccess() throws DataAccessException {
+        AuthData authSend = new AuthData("authToken", "username");
+        authSQL.createAuth(authSend);
 
     }
 }
