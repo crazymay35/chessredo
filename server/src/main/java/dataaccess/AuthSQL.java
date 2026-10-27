@@ -1,5 +1,6 @@
 package dataaccess;
 
+import com.google.gson.Gson;
 import model.AuthData;
 import java.sql.*;
 
@@ -26,6 +27,21 @@ public class AuthSQL implements InterfaceAuthSQL {
 
     @Override
     public AuthData getAuthToken(String authToken) throws DataAccessException {
+        String statement = "SELECT authToken, username FROM auth WHERE authToken=?";
+        try (Connection con = DatabaseManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(statement)) {
+            ps.setString(1, authToken);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String token = rs.getString("authToken");
+                    String username = rs.getString("username");
+                    return new AuthData(token, username);
+                }
+            }
+        }
+        catch (SQLException e) {
+            throw new DataAccessException(String.format("unable create auth: %s", e.getMessage()));
+        }
         return null;
     }
 
