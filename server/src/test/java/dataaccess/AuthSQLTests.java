@@ -5,8 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.xml.crypto.Data;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AuthSQLTests {
@@ -19,7 +17,7 @@ public class AuthSQLTests {
     }
     @AfterEach
     public void tearDown() throws DataAccessException {
-        //authSQL.clear();
+        authSQL.clear();
     }
     @Test
     public void setAuthSQLSuccess() {
@@ -54,4 +52,21 @@ public class AuthSQLTests {
     public void getAuthFailureAuthMissingFields() throws DataAccessException {
         assertNull(authSQL.getAuthToken(null));
     }
+    @Test
+    public void deleteAuthSuccess() throws DataAccessException {
+        AuthData authSend = new AuthData("authToken", "username");
+        authSQL.createAuth(authSend);
+        assertNotNull(authSQL.getAuthToken("authToken"));
+        authSQL.deleteAuth("authToken");
+        assertNull(authSQL.getAuthToken("authToken"));
+    }
+    @Test
+    public void clearSuccess() throws DataAccessException {
+        authSQL.createAuth(new AuthData("authToken1", "username1"));
+        authSQL.createAuth(new AuthData("authToken2", "username2"));
+        authSQL.clear();
+        assertNull(authSQL.getAuthToken("authToken1"));
+        assertNull(authSQL.getAuthToken("authToken2"));
+    }
+
 }

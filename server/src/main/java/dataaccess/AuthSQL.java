@@ -40,7 +40,7 @@ public class AuthSQL implements InterfaceAuthSQL {
             }
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable create auth: %s", e.getMessage()));
+            throw new DataAccessException(String.format("unable to create auth: %s", e.getMessage()));
         }
         return null;
     }
@@ -61,7 +61,15 @@ public class AuthSQL implements InterfaceAuthSQL {
 
     @Override
     public void deleteAuth(String authToken) throws DataAccessException {
-
+        String statement = "DELETE FROM auth WHERE authToken=?";
+        try (Connection con = DatabaseManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(statement)) {
+            ps.setString(1, authToken);
+            ps.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new DataAccessException(String.format("unable to delete auth: %s", e.getMessage()));
+        }
     }
 
     @Override
@@ -72,7 +80,7 @@ public class AuthSQL implements InterfaceAuthSQL {
             ps.executeUpdate();
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable clear auth table: %s", e.getMessage()));
+            throw new DataAccessException(String.format("unable to clear auth table: %s", e.getMessage()));
         }
     }
 }
