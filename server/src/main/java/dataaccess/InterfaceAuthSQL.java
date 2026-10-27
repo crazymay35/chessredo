@@ -1,6 +1,5 @@
-package dataaccess.sql;
+package dataaccess;
 
-import dataaccess.DataAccessException;
 import model.AuthData;
 
 public interface InterfaceAuthSQL {

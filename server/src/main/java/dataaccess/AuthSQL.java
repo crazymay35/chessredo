@@ -1,9 +1,12 @@
-package dataaccess.sql;
+package dataaccess;
 
-import dataaccess.DataAccessException;
 import model.AuthData;
+import java.sql.*;
 
 public class AuthSQL implements InterfaceAuthSQL {
+    public AuthSQL() throws DataAccessException {
+
+    }
 
     @Override
     public AuthData getAuthToken(String authToken) throws DataAccessException {
