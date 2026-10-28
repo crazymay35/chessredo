@@ -29,8 +29,7 @@ public class AuthSQLTests {
         authSQL.createAuth(authSend);
         AuthData authReceive = authSQL.getAuthToken("authToken");
         assertNotNull(authReceive);
-        assertEquals(authSend.authToken(), authReceive.authToken());
-        assertEquals(authSend.username(), authReceive.username());
+        assertEquals(authSend, authReceive);
     }
     @Test
     public void createAuthFailureDuplicate() {
