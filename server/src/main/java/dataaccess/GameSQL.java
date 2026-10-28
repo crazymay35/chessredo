@@ -88,11 +88,31 @@ public class GameSQL implements InterfaceGameSQL{
 
     @Override
     public void updateGame(GameData game) throws DataAccessException {
-
+        String statement = "UPDATE game SET * WHERE gameID=?";
+        try (Connection con = DatabaseManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(statement)) {
+            ps.setInt(1,game.gameID());
+            ps.setString(2,game.whiteUsername());
+            ps.setString(3, game.blackUsername());
+            ps.setString(4,game.gameName());
+            String jsonGame = new Gson().toJson(game.gameID());
+            ps.setString(5, jsonGame);
+            ps.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new DataAccessException(String.format("unable to update game: %s", e.getMessage()));
+        }
     }
 
     @Override
     public void clear() throws DataAccessException {
-
+        String statement = "TRUNCATE game";
+        try (Connection con = DatabaseManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(statement)) {
+            ps.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new DataAccessException(String.format("unable to clear game table: %s", e.getMessage()));
+        }
     }
 }
