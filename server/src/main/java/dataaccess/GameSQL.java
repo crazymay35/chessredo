@@ -74,7 +74,7 @@ public class GameSQL implements InterfaceGameSQL{
                 games.add(new GameData(id,whiteUsername,blackUsername,gameName,game));
             }
         } catch (SQLException e) {
-            throw new DataAccessException(String.format("unable list games: %s", e.getMessage()));
+            throw new DataAccessException(String.format("unable list game table: %s", e.getMessage()));
         }
         return games;
     }

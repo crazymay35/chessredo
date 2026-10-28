@@ -37,7 +37,7 @@ public class GameSQLTests {
         assertEquals(gameSend,gameReceive);
     }
     @Test
-    public void createGameFailureDuplicate() throws DataAccessException {
+    public void createGameFailureDuplicate() {
         GameData game = new GameData(1,"white","black","name", new ChessGame());
         assertDoesNotThrow(() -> gameSQL.createGame(game));
         assertThrows(DataAccessException.class, () -> gameSQL.createGame(game));

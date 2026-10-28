@@ -39,7 +39,7 @@ public class AuthSQL implements InterfaceAuthSQL {
             }
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable to create auth: %s", e.getMessage()));
+            throw new DataAccessException(String.format("unable to get authToken: %s", e.getMessage()));
         }
         return null;
     }
