@@ -1,14 +1,16 @@
-package dataaccess;
+package dataaccess.sql;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
+import dataaccess.DataAccessException;
+import dataaccess.InterfaceGameDAO;
 import model.GameData;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class GameSQL implements InterfaceGameDAO{
+public class GameSQL implements InterfaceGameDAO {
     private static final Gson GSON = new Gson();
     public GameSQL() throws DataAccessException {
         DatabaseManager.createDatabase();

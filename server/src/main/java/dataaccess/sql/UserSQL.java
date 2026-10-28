@@ -1,10 +1,12 @@
-package dataaccess;
+package dataaccess.sql;
 
+import dataaccess.DataAccessException;
+import dataaccess.InterfaceUserDAO;
 import model.UserData;
 
 import java.sql.*;
 
-public class UserSQL implements InterfaceUserDAO{
+public class UserSQL implements InterfaceUserDAO {
     public UserSQL() throws DataAccessException {
         DatabaseManager.createDatabase();
         try (Connection con = DatabaseManager.getConnection()) {

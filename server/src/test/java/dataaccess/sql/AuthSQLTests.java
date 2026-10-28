@@ -1,6 +1,5 @@
 package dataaccess.sql;
 
-import dataaccess.AuthSQL;
 import dataaccess.DataAccessException;
 import model.AuthData;
 import org.junit.jupiter.api.AfterEach;
