@@ -30,7 +30,10 @@ public class Server {
             gameDAO = new GameSQL();
         }
         catch (dataaccess.DataAccessException e) {
-            throw new RuntimeException("Failed to initialize database DAOs", e);
+            //throw new RuntimeException("Failed to initialize database DAOs", e);
+            userDAO = new UserDAO();
+            authDAO = new AuthDAO();
+            gameDAO = new GameDAO();
         }
         UserService userService = new UserService(userDAO,authDAO);
         GameService gameService = new GameService(authDAO,gameDAO);
