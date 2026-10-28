@@ -1,6 +1,9 @@
 package service;
 
 import dataaccess.*;
+import dataaccess.memory.AuthDAO;
+import dataaccess.memory.GameDAO;
+import dataaccess.memory.UserDAO;
 import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,13 +23,12 @@ public class GameServiceTests {
         UserDAO userDAO = new UserDAO();
         gameDAO = new GameDAO();
         userService = new UserService(userDAO, authDAO);
-        gameService = new GameService(authDAO, (GameDAO) gameDAO);
+        gameService = new GameService(authDAO, gameDAO);
     }
 
     //list games
     @Test
     public void listEmptyGamesSuccess() throws Exception {
-        //UserData sendUser = new UserData("username","password","user@gmail.com");
         AuthData authData = userService.register(new UserData("username","password","user@gmail.com"));
         gameService.listGames(authData.authToken());
     }
