@@ -3,7 +3,7 @@ package dataaccess;
 import model.AuthData;
 import java.sql.*;
 
-public class AuthSQL implements InterfaceAuthSQL {
+public class AuthSQL implements InterfaceAuthDAO {
     public AuthSQL() throws DataAccessException {
         DatabaseManager.createDatabase();
         try (Connection con = DatabaseManager.getConnection()) {

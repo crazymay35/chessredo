@@ -8,10 +8,10 @@ import java.util.Collection;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GameService {
-    private final AuthDAO authDAO;
-    private final GameDAO gameDAO;
+    private final InterfaceAuthDAO authDAO;
+    private final InterfaceGameDAO gameDAO;
 
-    public GameService(AuthDAO authDAO, GameDAO gameDAO) {
+    public GameService(InterfaceAuthDAO authDAO, InterfaceGameDAO gameDAO) {
         this.authDAO = authDAO;
         this.gameDAO = gameDAO;
     }

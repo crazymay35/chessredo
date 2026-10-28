@@ -4,7 +4,7 @@ import model.UserData;
 
 import java.sql.*;
 
-public class UserSQL implements InterfaceUserSQL{
+public class UserSQL implements InterfaceUserDAO{
     public UserSQL() throws DataAccessException {
         DatabaseManager.createDatabase();
         try (Connection con = DatabaseManager.getConnection()) {

@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class GameSQL implements InterfaceGameSQL{
+public class GameSQL implements InterfaceGameDAO{
     private static final Gson GSON = new Gson();
     public GameSQL() throws DataAccessException {
         DatabaseManager.createDatabase();

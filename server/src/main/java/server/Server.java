@@ -1,9 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
-import dataaccess.AuthDAO;
-import dataaccess.GameDAO;
-import dataaccess.UserDAO;
+import dataaccess.*;
 import io.javalin.*;
 import io.javalin.json.JavalinGson;
 import model.*;
@@ -22,10 +20,18 @@ public class Server {
             config.jsonMapper(new JavalinGson());
         });
 
-        // Register your endpoints and exception handlers here.
-        UserDAO userDAO = new UserDAO();
-        AuthDAO authDAO = new AuthDAO();
-        GameDAO gameDAO = new GameDAO();
+        // Register your endpoints and exception handlers here. (switch between DAO and SQL)
+        InterfaceUserDAO userDAO;
+        InterfaceAuthDAO authDAO;
+        InterfaceGameDAO gameDAO;
+        try {
+            userDAO = new UserSQL();
+            authDAO = new AuthSQL();
+            gameDAO = new GameSQL();
+        }
+        catch (dataaccess.DataAccessException e) {
+            throw new RuntimeException("Failed to initialize database DAOs", e);
+        }
         UserService userService = new UserService(userDAO,authDAO);
         GameService gameService = new GameService(authDAO,gameDAO);
         ClearService clearService = new ClearService(userDAO,authDAO,gameDAO);
