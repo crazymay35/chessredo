@@ -22,7 +22,7 @@ public class UserSQL implements InterfaceUserDAO{
             }
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable to configure database: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Error: unable to configure database: %s", e.getMessage()));
         }
     }
 
@@ -42,7 +42,7 @@ public class UserSQL implements InterfaceUserDAO{
             }
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable to get user: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Error: unable to get user: %s", e.getMessage()));
         }
         return null;
     }
@@ -58,7 +58,7 @@ public class UserSQL implements InterfaceUserDAO{
             ps.executeUpdate();
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable create user: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Error: unable create user: %s", e.getMessage()));
         }
     }
 
@@ -70,7 +70,7 @@ public class UserSQL implements InterfaceUserDAO{
             ps.executeUpdate();
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable to clear user table: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Error: unable to clear user table: %s", e.getMessage()));
         }
     }
 }

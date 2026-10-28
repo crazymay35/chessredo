@@ -29,7 +29,7 @@ public class GameSQL implements InterfaceGameDAO{
             }
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable to configure database: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Error: unable to configure database: %s", e.getMessage()));
         }
     }
 
@@ -52,7 +52,7 @@ public class GameSQL implements InterfaceGameDAO{
             }
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable to get game: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Error: unable to get game: %s", e.getMessage()));
         }
         return null;
     }
@@ -74,7 +74,7 @@ public class GameSQL implements InterfaceGameDAO{
                 games.add(new GameData(id,whiteUsername,blackUsername,gameName,game));
             }
         } catch (SQLException e) {
-            throw new DataAccessException(String.format("unable list game table: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Error: unable list game table: %s", e.getMessage()));
         }
         return games;
     }
@@ -93,7 +93,7 @@ public class GameSQL implements InterfaceGameDAO{
             return game.gameID();
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable create game: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Error: unable create game: %s", e.getMessage()));
         }
     }
 
@@ -110,7 +110,7 @@ public class GameSQL implements InterfaceGameDAO{
             ps.executeUpdate();
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable to update game: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Error: unable to update game: %s", e.getMessage()));
         }
     }
 
@@ -122,7 +122,7 @@ public class GameSQL implements InterfaceGameDAO{
             ps.executeUpdate();
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable to clear game table: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Error: unable to clear game table: %s", e.getMessage()));
         }
     }
 }

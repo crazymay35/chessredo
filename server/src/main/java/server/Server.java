@@ -49,6 +49,10 @@ public class Server {
             ctx.status(403);
             ctx.json(Map.of("message", e.getMessage()));
         });
+        javalin.exception(dataaccess.DataAccessException.class, (e, ctx) -> {
+            ctx.status(500);
+            ctx.json(Map.of("message", e.getMessage()));
+        });
 
         //DELETE /db
         javalin.delete("/db", ctx -> {

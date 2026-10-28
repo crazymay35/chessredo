@@ -20,7 +20,7 @@ public class AuthSQL implements InterfaceAuthDAO {
             }
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable to configure database: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Error: unable to configure database: %s", e.getMessage()));
         }
     }
 
@@ -39,7 +39,7 @@ public class AuthSQL implements InterfaceAuthDAO {
             }
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable to get authToken: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Error: unable to get authToken: %s", e.getMessage()));
         }
         return null;
     }
@@ -54,7 +54,7 @@ public class AuthSQL implements InterfaceAuthDAO {
             ps.executeUpdate();
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable create auth: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Error: unable create auth: %s", e.getMessage()));
         }
     }
 
@@ -67,7 +67,7 @@ public class AuthSQL implements InterfaceAuthDAO {
             ps.executeUpdate();
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable to delete auth: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Error: unable to delete auth: %s", e.getMessage()));
         }
     }
 
@@ -79,7 +79,7 @@ public class AuthSQL implements InterfaceAuthDAO {
             ps.executeUpdate();
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("unable to clear auth table: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Error: unable to clear auth table: %s", e.getMessage()));
         }
     }
 }

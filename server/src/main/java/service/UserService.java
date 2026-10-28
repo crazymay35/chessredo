@@ -39,7 +39,7 @@ public class UserService {
         if (tryUser == null) {
             throw new UnauthorizedException("Error: unauthorized");
         }
-        if (!tryUser.password().equals(user.password())) {
+        if (!BCrypt.checkpw(user.password(),tryUser.password())) {
             throw new UnauthorizedException("Error: unauthorized");
         }
         String authToken = UUID.randomUUID().toString();
