@@ -20,7 +20,7 @@ public class AuthSQLTests {
         authSQL.clear();
     }
     @Test
-    public void setAuthSQLSuccess() {
+    public void databaseAuthSQLSuccess() {
         assertNotNull(authSQL);
     }
     @Test

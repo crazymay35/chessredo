@@ -20,13 +20,13 @@ public class AuthSQL implements InterfaceAuthSQL {
             }
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("Unable to configure database: %s", e.getMessage()));
+            throw new DataAccessException(String.format("unable to configure database: %s", e.getMessage()));
         }
     }
 
     @Override
     public AuthData getAuthToken(String authToken) throws DataAccessException {
-        String statement = "SELECT authToken, username FROM auth WHERE authToken=?";
+        String statement = "SELECT * FROM auth WHERE authToken=?";
         try (Connection con = DatabaseManager.getConnection();
              PreparedStatement ps = con.prepareStatement(statement)) {
             ps.setString(1, authToken);

@@ -1,5 +1,7 @@
 package dataaccess;
 
+import chess.ChessGame;
+import com.google.gson.Gson;
 import model.AuthData;
 import model.GameData;
 
@@ -27,12 +29,31 @@ public class GameSQL implements InterfaceGameSQL{
             }
         }
         catch (SQLException e) {
-            throw new DataAccessException(String.format("Unable to configure database: %s", e.getMessage()));
+            throw new DataAccessException(String.format("unable to configure database: %s", e.getMessage()));
         }
     }
 
     @Override
     public GameData getGame(int gameID) throws DataAccessException {
+        String statement = "SELECT * FROM auth WHERE gameID=?";
+        try (Connection con = DatabaseManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(statement)) {
+            ps.setInt(1, gameID);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int id = rs.getInt("gameID");
+                    String whiteUsername = rs.getString("whiteUsername");
+                    String blackUsername = rs.getString("blackUsername");
+                    String gameName = rs.getString("gameName");
+                    String jsonGame = rs.getString("game");
+                    ChessGame game = new Gson().fromJson(jsonGame, ChessGame.class);
+                    return new GameData(id,whiteUsername,blackUsername,gameName,game);
+                }
+            }
+        }
+        catch (SQLException e) {
+            throw new DataAccessException(String.format("unable to get game: %s", e.getMessage()));
+        }
         return null;
     }
 
@@ -50,7 +71,8 @@ public class GameSQL implements InterfaceGameSQL{
             ps.setString(2,game.whiteUsername());
             ps.setString(3, game.blackUsername());
             ps.setString(4,game.gameName());
-            ps.setString(5, String.valueOf(game.game()));
+            String jsonGame = new Gson().toJson(game.gameID());
+            ps.setString(5, jsonGame);
             ps.executeUpdate();
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
