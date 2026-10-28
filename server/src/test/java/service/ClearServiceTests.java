@@ -1,6 +1,8 @@
 package service;
 
-import dataaccess.*;
+import dataaccess.memory.AuthDAO;
+import dataaccess.memory.GameDAO;
+import dataaccess.memory.UserDAO;
 import model.*;
 import org.junit.jupiter.api.Test;
 

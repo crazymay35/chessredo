@@ -2,6 +2,9 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.*;
+import dataaccess.memory.AuthDAO;
+import dataaccess.memory.GameDAO;
+import dataaccess.memory.UserDAO;
 import dataaccess.sql.AuthSQL;
 import dataaccess.sql.GameSQL;
 import dataaccess.sql.UserSQL;

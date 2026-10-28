@@ -1,11 +1,12 @@
-package dataaccess;
+package dataaccess.memory;
 
+import dataaccess.InterfaceGameDAO;
 import model.GameData;
 
 import java.util.Collection;
 import java.util.HashMap;
 
-public class GameDAO implements InterfaceGameDAO{
+public class GameDAO implements InterfaceGameDAO {
     private final HashMap<Integer, GameData> games = new HashMap<>();
 
     @Override
