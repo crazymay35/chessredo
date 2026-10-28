@@ -18,11 +18,11 @@ public class GameSQLTests {
     @BeforeEach
     public void setUp() throws DataAccessException {
         gameSQL = new GameSQL();
-        //gameSQL.clear();
+        gameSQL.clear();
     }
     @AfterEach
     public void tearDown() throws DataAccessException {
-        //gameSQL.clear();
+        gameSQL.clear();
     }
     @Test
     public void databaseAuthSQLSuccess() {
