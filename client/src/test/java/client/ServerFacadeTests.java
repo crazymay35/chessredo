@@ -3,6 +3,7 @@ package client;
 import client.ResponseException;
 import client.ServerFacade;
 import model.UserData;
+import model.UserLoginRequest;
 import org.junit.jupiter.api.*;
 import server.Server;
 
@@ -39,7 +40,7 @@ public class ServerFacadeTests {
         assertEquals("test",authData.username());
     }
     @Test
-    public void registerFailureDuplicate() throws ResponseException {
+    public void registerFailureDuplicate() {
         UserData user = new UserData("test","password","test@gmail.com");
         assertThrows(ResponseException.class, () -> {
             facade.register(user);
@@ -47,7 +48,7 @@ public class ServerFacadeTests {
         });
     }
     @Test
-    public void registerFailureSameUsername() throws ResponseException {
+    public void registerFailureSameUsername() {
         UserData user = new UserData("test","password","test@gmail.com");
         UserData other = new UserData("test","other","other@gmail.com");
         assertThrows(ResponseException.class, () -> {
@@ -55,6 +56,39 @@ public class ServerFacadeTests {
             facade.register(other);
         });
     }
+    @Test
+    public void loginSuccess() throws ResponseException {
+        UserData user = new UserData("test","password","test@gmail.com");
+        facade.register(user);
+        UserLoginRequest login = new UserLoginRequest(user.username(),user.password());
+        var authData = facade.login(login);
+        assertNotNull(authData.authToken());
+    }
+    @Test
+    public void loginFailureUserDNE() {
+        UserLoginRequest login = new UserLoginRequest("test","password");
+        assertThrows(ResponseException.class, () -> {
+            facade.login(login);
+        });
+    }
+    @Test
+    public void logoutSuccess() throws ResponseException {
+        UserData user = new UserData("test","password","test@gmail.com");
+        var auth = facade.register(user);
+        assertNotNull(auth.authToken());
+        assertDoesNotThrow(() -> facade.logout(auth.authToken()));
+        assertThrows(ResponseException.class, () -> {
+            facade.logout(auth.authToken());
+        });
+    }
+    @Test
+    public void logoutFailureAuthDNE() {
+        String fakeAuth = "fakeAuth";
+        assertThrows(ResponseException.class, () -> {
+            facade.logout(fakeAuth);
+        });
+    }
+
 
     /*@Test
     public void sampleTest() {
