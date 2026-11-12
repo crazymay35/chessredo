@@ -15,7 +15,10 @@ public class ServerFacade {
     private final String serverURL;
     private final Gson gson = new Gson();
     public ServerFacade(String url) {
-        serverURL = url;
+        this.serverURL = url;
+    }
+    public ServerFacade(int port) {
+        this.serverURL = "http://localhost:" + port;
     }
 
     public AuthData register(UserData user) throws ResponseException {
@@ -24,6 +27,13 @@ public class ServerFacade {
         return handleResponse(response, AuthData.class);
     }
 
+    //others will go here
+
+    public void clear() throws ResponseException {
+        var request = buildRequest("DELETE","/db",null,null);
+        var response = sendRequest(request);
+        handleResponse(response,null);
+    }
     private HttpRequest buildRequest(String method,String path, Object body, String authToken) {
         var request = HttpRequest.newBuilder().uri(URI.create(serverURL + path)).method(method, makeRequestBody(body));
         if (body != null) {
@@ -36,7 +46,7 @@ public class ServerFacade {
     }
     private BodyPublisher makeRequestBody(Object request) {
         if (request != null) {
-            return BodyPublishers.ofString(new Gson().toJson(request));
+            return BodyPublishers.ofString(gson.toJson(request));
         }
         else {
             return BodyPublishers.noBody();
@@ -56,12 +66,8 @@ public class ServerFacade {
 
         if (!isSuccessful(status)) {
             String errorMsg = body;
-            /*if (body != null && !body.isBlank()) {
-                throw new ResponseException(status, body);
-            }
-            throw new ResponseException(status, "other failure: " + status);*/
             try {
-                var map = new Gson().fromJson(body, java.util.Map.class);
+                var map = gson.fromJson(body, java.util.Map.class);
                 if (map != null && map.containsKey("message")) {
                     errorMsg = (String) map.get("message");
                 }
@@ -70,7 +76,7 @@ public class ServerFacade {
             throw new ResponseException(status, errorMsg);
         }
         if (responseClass != null) {
-            return new Gson().fromJson(body, responseClass);
+            return gson.fromJson(body, responseClass);
         }
         return null;
     }
