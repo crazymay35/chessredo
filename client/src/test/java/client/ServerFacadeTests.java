@@ -145,7 +145,6 @@ public class ServerFacadeTests {
     public void joinGameFailureGameNull() throws ResponseException {
         UserData user = new UserData("test","password","test@gmail.com");
         var authData = facade.register(user);
-        GameCreateRequest gameRequest = new GameCreateRequest("chess");
         assertThrows(ResponseException.class, () -> facade.joinGame(null, authData.authToken()));
     }
     @Test
@@ -178,10 +177,4 @@ public class ServerFacadeTests {
     public void listGamesFailure() {
         assertThrows(ResponseException.class, () -> facade.listGames("fakeAuth"));
     }
-
-    /*@Test
-    public void sampleTest() {
-        Assertions.assertTrue(true);
-    }*/
-
 }

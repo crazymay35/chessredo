@@ -6,16 +6,20 @@ import static ui.EscapeSequences.*;
 
 public class ClientMain {
     public static void main(String[] args) {
-        //var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
-        //System.out.println("♕ 240 Chess Client: " + piece);
-        var game = new ChessGame();
+        var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+        System.out.println("♕ 240 Chess Client: " + piece);
+        /*var game = new ChessGame();
         ClientMain clientMain = new ClientMain();
         clientMain.printChessboard(game.getBoard());
         System.out.print(SET_BG_COLOR_WHITE);
         System.out.print(SET_TEXT_COLOR_BLACK);
-        System.out.print(SET_TEXT_BOLD);
+        System.out.print(SET_TEXT_BOLD);*/
+        int port = 8080;
+        var facade = new ServerFacade(port);
+        String preLoginClient;
+
     }
-    public void printChessboard(ChessBoard board) {
+    /*public void printChessboard(ChessBoard board) {
         for (int row = 8; row > 0; row--) {
             for (int col = 1; col < 10; col++) {
                 if (col == 9) {
@@ -48,5 +52,5 @@ public class ClientMain {
             case PAWN -> piece.getTeamColor() == ChessGame.TeamColor.BLACK ? BLACK_PAWN : WHITE_PAWN;
         };
         System.out.print(pieceType);
-    }
+    }*/
 }
