@@ -14,10 +14,16 @@ public class ClientMain {
         System.out.print(SET_TEXT_COLOR_BLACK);
         System.out.print(SET_TEXT_BOLD);*/
         int port = 8080;
-        var facade = new ServerFacade(port);
-        var preLoginClient = new PreLoginClient(facade);
-        AuthData auth =  preLoginClient.run();
-        var postLoginClient = new PostLoginClient(auth);
+        var server = new ServerFacade(port);
+        while (true) {
+            var preLoginClient = new PreLoginClient(server);
+            AuthData auth =  preLoginClient.run();
+            if (auth != null) {
+                var postLoginClient = new PostLoginClient(auth);
+            }
+        }
+
+
     }
     /*public void printChessboard(ChessBoard board) {
         for (int row = 8; row > 0; row--) {

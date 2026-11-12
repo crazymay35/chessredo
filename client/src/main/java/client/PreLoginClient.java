@@ -2,6 +2,7 @@ package client;
 
 import model.AuthData;
 import model.UserData;
+import model.UserLoginRequest;
 
 import java.util.Scanner;
 
@@ -12,7 +13,9 @@ public class PreLoginClient {
     }
     public AuthData run() {
         Scanner scanner = new Scanner(System.in);
-        help();
+        System.out.println("=== Chess - Pre Login ===");
+        System.out.println("type 'help' to see available commands");
+
         while (true) {
             String line = scanner.nextLine();
             String[] tokens = line.trim().split("\\s");
@@ -23,6 +26,8 @@ public class PreLoginClient {
 
             try {
                 switch (command) {
+                    case "register" -> { return register(tokens); }
+                    case "login" -> { return login(tokens); }
                     case "help" -> { help(); }
                     case "quit" -> { quit(); }
                     default -> { System.out.println("unknown command. Type 'help'"); }
@@ -50,7 +55,16 @@ public class PreLoginClient {
         System.exit(0);
     }
     //login (username, password)
-
+    private AuthData login(String[] tokens) throws ResponseException {
+        if (tokens.length < 3) {
+            System.out.println("login <USERNAME> <PASSWORD>");
+            return null;
+        }
+        UserLoginRequest user = new UserLoginRequest(tokens[1],tokens[2]);
+        AuthData auth = server.login(user);
+        System.out.println("logged in");
+        return auth;
+    }
     //register (username, password, email)
     private AuthData register(String[] tokens) throws ResponseException {
         if (tokens.length < 4) {
