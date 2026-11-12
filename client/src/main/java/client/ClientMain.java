@@ -1,13 +1,12 @@
 package client;
 
 import chess.*;
+import model.AuthData;
 
 import static ui.EscapeSequences.*;
 
 public class ClientMain {
     public static void main(String[] args) {
-        var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
-        System.out.println("♕ 240 Chess Client: " + piece);
         /*var game = new ChessGame();
         ClientMain clientMain = new ClientMain();
         clientMain.printChessboard(game.getBoard());
@@ -16,8 +15,9 @@ public class ClientMain {
         System.out.print(SET_TEXT_BOLD);*/
         int port = 8080;
         var facade = new ServerFacade(port);
-        String preLoginClient;
-
+        var preLoginClient = new PreLoginClient(facade);
+        AuthData auth =  preLoginClient.run();
+        var postLoginClient = new PostLoginClient(auth);
     }
     /*public void printChessboard(ChessBoard board) {
         for (int row = 8; row > 0; row--) {
