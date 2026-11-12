@@ -14,9 +14,7 @@ public class ServerFacade {
     private final HttpClient client = HttpClient.newHttpClient();
     private final String serverURL;
     private final Gson gson = new Gson();
-    public ServerFacade(String url) {
-        this.serverURL = url;
-    }
+
     public ServerFacade(int port) {
         this.serverURL = "http://localhost:" + port;
     }
@@ -33,6 +31,24 @@ public class ServerFacade {
     }
     public void logout(String authToken) throws ResponseException {
         var request = buildRequest("DELETE","/session", null, authToken);
+        var response = sendRequest(request);
+        handleResponse(response,null);
+    }
+
+    public GameData[] listGames(String authToken) throws ResponseException {
+        var request = buildRequest("GET","/game", null, authToken);
+        var response = sendRequest(request);
+        record ListGamesResponse(GameData[] games) {}
+        var listResponse = handleResponse(response, ListGamesResponse.class);
+        return listResponse.games();
+    }
+    public GameData createGame(GameCreateRequest game, String authToken) throws ResponseException {
+        var request = buildRequest("POST","/game",game,authToken);
+        var response = sendRequest(request);
+        return handleResponse(response,GameData.class);
+    }
+    public void joinGame(GameJoinRequest game, String authToken) throws ResponseException {
+        var request = buildRequest("PUT","/game",game,authToken);
         var response = sendRequest(request);
         handleResponse(response,null);
     }
