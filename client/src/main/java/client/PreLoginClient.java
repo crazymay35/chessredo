@@ -26,9 +26,9 @@ public class PreLoginClient {
 
             try {
                 switch (command) {
+                    case "help" -> { help(); }
                     case "register" -> { return register(tokens); }
                     case "login" -> { return login(tokens); }
-                    case "help" -> { help(); }
                     case "quit" -> { quit(); }
                     default -> { System.out.println("unknown command. Type 'help'"); }
                 }
@@ -49,10 +49,16 @@ public class PreLoginClient {
         System.out.println("quit - exit program");
         System.out.println("help - display possible commands");
     }
-    //quit
-    private void quit() {
-        System.out.println("Goodbye!");
-        System.exit(0);
+    //register (username, password, email)
+    private AuthData register(String[] tokens) throws ResponseException {
+        if (tokens.length < 4) {
+            System.out.println("register <USERNAME> <PASSWORD> <EMAIL>");
+            return null;
+        }
+        UserData user = new UserData(tokens[1],tokens[2],tokens[3]);
+        AuthData auth = server.register(user);
+        System.out.println("registered and logged in");
+        return auth;
     }
     //login (username, password)
     private AuthData login(String[] tokens) throws ResponseException {
@@ -65,16 +71,9 @@ public class PreLoginClient {
         System.out.println("logged in");
         return auth;
     }
-    //register (username, password, email)
-    private AuthData register(String[] tokens) throws ResponseException {
-        if (tokens.length < 4) {
-            System.out.println("register <USERNAME> <PASSWORD> <EMAIL>");
-            return null;
-        }
-        UserData user = new UserData(tokens[1],tokens[2],tokens[3]);
-        AuthData auth = server.register(user);
-        System.out.println("registered and logged in");
-        return auth;
+    //quit
+    private void quit() {
+        System.out.println("Goodbye!");
+        System.exit(0);
     }
-
 }

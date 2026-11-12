@@ -19,7 +19,11 @@ public class ClientMain {
             var preLoginClient = new PreLoginClient(server);
             AuthData auth =  preLoginClient.run();
             if (auth != null) {
-                var postLoginClient = new PostLoginClient(auth);
+                var postLoginClient = new PostLoginClient(server, auth.authToken());
+                boolean loggedOut = postLoginClient.run();
+                if (!loggedOut) {
+                    break;
+                }
             }
         }
 
