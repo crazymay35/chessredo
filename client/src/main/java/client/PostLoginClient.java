@@ -8,8 +8,6 @@ import model.GameJoinRequest;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import static ui.EscapeSequences.*;
-
 public class PostLoginClient {
     private final ServerFacade server;
     private final String authToken;
@@ -33,13 +31,15 @@ public class PostLoginClient {
 
             try {
                 switch (command) {
-                    case "help" -> { help(); }
-                    case "create" -> { create(tokens); }
-                    case "list" -> { list(); }
-                    case "play" -> { play(tokens); }
-                    case "observe" -> { observe(tokens); }
-                    case "logout" -> { logout(authToken); }
-                    default -> { System.out.println("unknown command. Type 'help'"); }
+                    case "help" -> help();
+                    case "create" -> create(tokens);
+                    case "list" -> list();
+                    case "play" -> play(tokens);
+                    case "observe" -> observe(tokens);
+                    case "logout" -> {
+                        return logout(authToken);
+                    }
+                    default -> System.out.println("unknown command. Type 'help'");
                 }
             }
             /*catch (ResponseException e) {
@@ -95,19 +95,7 @@ public class PostLoginClient {
             System.out.println("play <WHITE|BLACK> <GAMEID>");
             return;
         }
-        int index;
-        try {
-            index = Integer.parseInt(tokens[1]);
-        }
-        catch (Exception e) {
-            System.out.println("Error: id must be valid list number");
-            return;
-        }
-        Integer id = displayedGames.get(index);
-        if (id == null) {
-            System.out.println("Error: game id not exist");
-            return;
-        }
+        int id = checkingGameID(tokens);
         String color = tokens[2].toUpperCase();
         if (!color.equals("WHITE") && !color.equals("BLACK")) {
             System.out.println("Error: color must be WHITE or BLACK");
@@ -117,6 +105,7 @@ public class PostLoginClient {
         server.joinGame(game,authToken);
         System.out.println("joined game");
         var playGame = getGame(id);
+        assert playGame != null;
         BoardUI.drawBoard(playGame.getBoard());
     }
     //observe (gameID)
@@ -125,21 +114,10 @@ public class PostLoginClient {
             System.out.println("observe <GAMEID>");
             return;
         }
-        int index;
-        try {
-            index = Integer.parseInt(tokens[1]);
-        }
-        catch (Exception e) {
-            System.out.println("Error: id must be valid list number");
-            return;
-        }
-        Integer id = displayedGames.get(index);
-        if (id == null) {
-            System.out.println("Error: game id not exist");
-            return;
-        }
+        int id = checkingGameID(tokens);
         System.out.println("observing game");
         var game = getGame(id);
+        assert game != null;
         BoardUI.drawBoard(game.getBoard());
     }
     //logout
@@ -156,5 +134,21 @@ public class PostLoginClient {
             }
         }
         return null;
+    }
+    private int checkingGameID(String[] tokens) {
+        int index;
+        try {
+            index = Integer.parseInt(tokens[1]);
+        }
+        catch (Exception e) {
+            System.out.println("Error: id must be valid list number");
+            return -1;
+        }
+        Integer id = displayedGames.get(index);
+        if (id == null) {
+            System.out.println("Error: game id not exist");
+            return -1;
+        }
+        return id;
     }
 }

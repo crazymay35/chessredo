@@ -27,11 +27,12 @@ public class PreLoginClient {
 
             try {
                 switch (command) {
-                    case "help" -> { help(); }
+                    case "help" -> help();
                     case "register" -> { return register(tokens); }
                     case "login" -> { return login(tokens); }
-                    case "quit" -> { quit(); }
-                    default -> { System.out.println("unknown command. Type 'help'"); }
+                    case "quit" -> quit();
+                    case "clear" -> clear();
+                    default -> System.out.println("unknown command. Type 'help'");
                 }
             }
             /*catch (ResponseException e) {
@@ -76,5 +77,10 @@ public class PreLoginClient {
     private void quit() {
         System.out.println("Goodbye!");
         System.exit(0);
+    }
+    //clear (not displayed as an option)
+    private void clear() throws ResponseException {
+        server.clear();
+        System.out.println("database cleared");
     }
 }

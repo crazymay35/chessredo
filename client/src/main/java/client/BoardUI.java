@@ -48,5 +48,4 @@ public class BoardUI {
         };
         System.out.print(pieceType);
     }
-
 }
