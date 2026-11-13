@@ -11,6 +11,7 @@ public class PreLoginClient {
     PreLoginClient(ServerFacade server) {
         this.server = server;
     }
+
     public AuthData run() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("=== Chess - Pre Login ===");
