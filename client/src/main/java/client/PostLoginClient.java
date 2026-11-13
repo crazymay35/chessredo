@@ -1,18 +1,20 @@
 package client;
 
-import model.AuthData;
+import chess.ChessGame;
 import model.GameCreateRequest;
 import model.GameData;
+import model.GameJoinRequest;
 
 import java.util.HashMap;
 import java.util.Scanner;
+
+import static ui.EscapeSequences.*;
 
 public class PostLoginClient {
     private final ServerFacade server;
     private final String authToken;
     private final HashMap<Integer,Integer> displayedGames = new HashMap<>();
     PostLoginClient(ServerFacade server, String authToken) {
-        //System.out.println("now in post login client");
         this.server = server;
         this.authToken = authToken;
     }
@@ -33,10 +35,10 @@ public class PostLoginClient {
                 switch (command) {
                     case "help" -> { help(); }
                     case "create" -> { create(tokens); }
-                    case "list" -> { }
-                    case "play" -> {}
-                    case "observe" -> {}
-                    case "logout" -> { }
+                    case "list" -> { list(); }
+                    case "play" -> { play(tokens); }
+                    case "observe" -> { observe(tokens); }
+                    case "logout" -> { logout(authToken); }
                     default -> { System.out.println("unknown command. Type 'help'"); }
                 }
             }
@@ -80,15 +82,79 @@ public class PostLoginClient {
         int index = 1;
         for (GameData game: games) {
             displayedGames.put(index, game.gameID());
-            String white = (game.whiteUsername() != null) ? game.whiteUsername() : "<EMPTY";
-            String black = (game.blackUsername() != null) ? game.blackUsername() : "<EMPTY";
-            System.out.printf("%d Name: %s | White: %s | Black: %s", index, game.gameName(), white, black);
+            String white = (game.whiteUsername() != null) ? game.whiteUsername() : "<EMPTY>";
+            String black = (game.blackUsername() != null) ? game.blackUsername() : "<EMPTY>";
+            System.out.printf("%d Name: %s | White: %s | Black: %s\n", index, game.gameName(), white, black);
             index++;
         }
         System.out.println();
     }
     //play (playerColor, gameID)
-
+    private void play(String[] tokens) throws ResponseException {
+        if (tokens.length < 3) {
+            System.out.println("play <WHITE|BLACK> <GAMEID>");
+            return;
+        }
+        int index;
+        try {
+            index = Integer.parseInt(tokens[1]);
+        }
+        catch (Exception e) {
+            System.out.println("Error: id must be valid list number");
+            return;
+        }
+        Integer id = displayedGames.get(index);
+        if (id == null) {
+            System.out.println("Error: game id not exist");
+            return;
+        }
+        String color = tokens[2].toUpperCase();
+        if (!color.equals("WHITE") && !color.equals("BLACK")) {
+            System.out.println("Error: color must be WHITE or BLACK");
+            return;
+        }
+        GameJoinRequest game = new GameJoinRequest(color,id);
+        server.joinGame(game,authToken);
+        System.out.println("joined game");
+        var playGame = getGame(id);
+        BoardUI.drawBoard(playGame.getBoard());
+    }
     //observe (gameID)
+    private void observe(String[] tokens) throws ResponseException {
+        if (tokens.length < 2) {
+            System.out.println("observe <GAMEID>");
+            return;
+        }
+        int index;
+        try {
+            index = Integer.parseInt(tokens[1]);
+        }
+        catch (Exception e) {
+            System.out.println("Error: id must be valid list number");
+            return;
+        }
+        Integer id = displayedGames.get(index);
+        if (id == null) {
+            System.out.println("Error: game id not exist");
+            return;
+        }
+        System.out.println("observing game");
+        var game = getGame(id);
+        BoardUI.drawBoard(game.getBoard());
+    }
     //logout
+    private boolean logout(String authToken) throws ResponseException {
+        server.logout(authToken);
+        System.out.println("logged out");
+        return true;
+    }
+    private ChessGame getGame(int findID) throws ResponseException {
+        GameData[] games = server.listGames(authToken);
+        for (var game : games) {
+            if (game.gameID() == findID) {
+                return game.game();
+            }
+        }
+        return null;
+    }
 }
