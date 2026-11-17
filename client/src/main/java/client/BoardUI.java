@@ -36,6 +36,9 @@ public class BoardUI {
             }
             System.out.print('\n');
         }
+        System.out.print(RESET_BG_COLOR);
+        System.out.print(RESET_TEXT_COLOR);
+        System.out.print(RESET_TEXT_BOLD_FAINT);
     }
     private static void printPiece(ChessPiece piece) {
         String pieceType = switch (piece.getPieceType()) {
